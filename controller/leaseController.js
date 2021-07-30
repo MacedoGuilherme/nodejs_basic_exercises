@@ -13,15 +13,16 @@ module.exports = () => {
   };
 
   leasesController.finduser = (req, res) => {
-    const lease = req.body;
+    const cpf = req.body;
 
     // const user = leases.filter((item) => {
     //   return item.cpf === lease.cpf;
     // });
 
-    leaseRep.findlease(lease);
+    leaseRep.finduser((leases) => {
+      res.status(200).json(leases);
+    });
 
-    res.status(200).json(user);
   };
 
   leasesController.totallocacoes = (req, res) => {
@@ -30,7 +31,7 @@ module.exports = () => {
     // }, 0);
 
     leaseRep.totallocacoes((total) => {
-      res.status(200).send("Total value of leases: " + totalLeases);
+      res.status(200).json(total);
     });
   };
 

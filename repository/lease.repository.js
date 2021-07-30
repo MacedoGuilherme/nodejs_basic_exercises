@@ -31,18 +31,37 @@ module.exports = () => {
           return;
         }
   
-        // usuarios = rows.map((item) => {
-        //   if (user.id === item.id) {
-        //     return user;
-        //   }
-        //   return item;
-        // });
+        console.log(rows);
+  
+        return callback(rows);
+      });
+    };
+
+    repository.totallocacoes = (callback) => {
+      const connection = conectar();
+      connection.query("SELECT SUM(PRICE) FROM LEASES;", function (err, rows) {
+        if (err) {
+          console.log(err);
+          return;
+        }
   
         console.log(rows);
   
         return callback(rows);
       });
     };
+
+    repository.finduser = (callback) => {
+      const connection = conectar();
+      connection.query(`SELECT CUSTOMER, CPF, EMAIL FROM LEASES`, function (err, rows) {
+        if (err) {
+          console.log(err);
+          return;
+        }  
+        return callback(rows)
+      });
+
+    }
   
     repository.register = (lease) => {
       const connection = conectar();
