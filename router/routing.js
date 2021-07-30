@@ -6,6 +6,6 @@ routing.get('/finduser', leaseController.finduser)
 routing.get('/totallocacoes', leaseController.totallocacoes)
 routing.post('/register', leaseController.register)
 routing.put('/changeemail', leaseController.changeemail)
-routing.delete('/deletelease', leaseController.deletelease)
+routing.delete('/deletelease/:id', leaseController.deletelease)
 
 module.exports = routing;
