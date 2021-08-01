@@ -11,11 +11,16 @@ module.exports = () => {
   };
 
   leasesController.finduser = (req, res) => {
-    const lease = req.params.cpf;
+    const cpf = req.body.cpf;
 
-    leaseRep.findUser(lease);
+    leaseRep.findUser(cpf, (callback) => {
+      if (callback.length !== 0) {
+        res.status(200).json(callback);
+      } else {
+        res.status(200).send("Usuário não encontrado!");
+      }
+    });
 
-    res.status(200).json(lease);
   };
 
   leasesController.totalleases = (req, res) => {
@@ -45,17 +50,26 @@ module.exports = () => {
   leasesController.changeemail = (req, res) => {
     const customer = req.body;
 
-    leaseRep.changeEmail(customer);
+    leaseRep.changeEmail(customer, (callback) => {
+      if (callback === 0) {
+        res.status(200).send("CPF não encontrado!");
+      } else {
+        res.status(200).send("Email alterado com sucesso!");
+      }
+    });
 
-    res.status(200).send("Usuário alterado com sucesso!");
   };
 
   leasesController.deletelease = (req, res) => {
     const id = req.params.id;
 
-    leaseRep.deleteLease(id);
-
-    res.status(200).send("Usuário deletado com sucesso!");
+    leaseRep.deleteLease(id, (callback) => {
+      if (callback === 0) {
+        res.status(200).send("Usuário não encontrado!");
+      } else {
+        res.status(200).send("Usuário deletado com sucesso!");
+      }
+    });
   };
 
   return leasesController;

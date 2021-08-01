@@ -1,6 +1,6 @@
 const conectar = require("../repository/config");
 
-module.exports = deletelease = (id) => {
+module.exports = deletelease = (id, callback) => {
   const connection = conectar();
   connection.query(
     `DELETE FROM LEASES WHERE ID = ?`,
@@ -11,7 +11,7 @@ module.exports = deletelease = (id) => {
         return;
       }
 
-      console.log(`excluiu... ${res.affectedRows}`);
+      return callback(res.affectedRows);
     }
   );
 };

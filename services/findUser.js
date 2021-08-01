@@ -1,6 +1,6 @@
 const conectar = require("../repository/config");
 
-module.exports = (cpf) => {
+module.exports = (cpf, callback) => {
   const connection = conectar();
   connection.query(
     `SELECT CUSTOMER, CPF, EMAIL FROM LEASES WHERE CPF = ?`,
@@ -10,10 +10,7 @@ module.exports = (cpf) => {
         console.log(err);
         return;
       }
-
-      console.log(rows);
-
-      return rows;
+      return callback(rows);
     }
   );
 };

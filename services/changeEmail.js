@@ -1,6 +1,6 @@
 const conectar = require("../repository/config");
 
-module.exports = (user) => {
+module.exports = (user, callback) => {
   const { cpf, newEmail } = user;
   const connection = conectar();
   connection.query(
@@ -11,7 +11,7 @@ module.exports = (user) => {
         console.log(err);
         return;
       }
-      return res.affectedRows;
+      return callback(res.affectedRows);
     }
   );
 };
