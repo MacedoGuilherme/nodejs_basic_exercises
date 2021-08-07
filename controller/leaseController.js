@@ -4,67 +4,93 @@ const leaseRep = require("../repository/lease.repository")();
 module.exports = () => {
   const leasesController = {};
 
-  leasesController.list = (req, res) => {
-    leaseRep.list((leases) => {
+  leasesController.list = (req, res, callback) => {
+    leaseRep.list((leases, err) => {
+      if (err) {
+        return callback(err);
+      }
       res.status(200).json(leases);
     });
   };
 
-  leasesController.finduser = (req, res) => {
+  leasesController.finduser = (req, res, callback) => {
     const cpf = req.body.cpf;
 
-    leaseRep.findUser(cpf, (callback) => {
-      if (callback.length !== 0) {
-        res.status(200).json(callback);
-      } else {
-        res.status(200).send("Usuário não encontrado!");
+    leaseRep.findUser(cpf, (user, err) => {
+      // if (callback.length !== 0) {
+      //   res.status(200).json(callback);
+      // } else {
+      //   res.status(200).send("Usuário não encontrado!");
+      // }
+      if (err) {
+        return callback(err);
       }
+      res.status(200).json(user);
     });
-
   };
 
-  leasesController.totalleases = (req, res) => {
-    leaseRep.totalLeases((total) => {
+  leasesController.totalleases = (req, res, callback) => {
+    leaseRep.totalLeases((total, err) => {
+      if (err) {
+        return callback(err);
+      }
       res.status(200).json(total);
     });
   };
 
-  leasesController.register = (req, res) => {
+  leasesController.register = (req, res, callback) => {
     const lease = req.body;
-    const { id, customer, cpf, email, game, price } = lease;
+    const { cpf } = lease;
+
+    if (!cpf) {
+      throw {
+        httpStatusCode: 400,
+        code: "ERR001",
+        message: "CPF é obrigatório",
+      };
+    }
+
     const requestCpf = `https://robsonalves-net-br-document-generator-srvapp.azurewebsites.net/api/CPF/isvalid/${cpf}`;
 
-    request(
-      `https://robsonalves-net-br-document-generator-srvapp.azurewebsites.net/api/CPF/isvalid/${cpf}`,
-      (error, response, body) => {
-        if (body !== '"CPF inválido"') {
-          leaseRep.register(lease);
-          res.send("Locação cadastrada com sucesso!");
-        } else {
-          res.send(`${body}`);
-        }
+    request(requestCpf, (error, response, body) => {
+      if (body !== '"CPF inválido"') {
+        leaseRep.register(lease, (leases, err) => {
+          if (err) {
+            return callback(err);
+          }
+          res.status(200).json('Deu certo!');
+        });
+      } else {
+        res.status(400).json(body);
       }
-    );
+    });
   };
 
-  leasesController.changeemail = (req, res) => {
+  leasesController.changeemail = (req, res, callback) => {
     const customer = req.body;
 
-    leaseRep.changeEmail(customer, (callback) => {
-      if (callback === 0) {
+    leaseRep.changeEmail(customer, (callback2, err) => {
+      if (err) {
+        return callback(err);
+      }
+
+      if (callback2 === 0) {
         res.status(200).send("CPF não encontrado!");
       } else {
         res.status(200).send("Email alterado com sucesso!");
       }
     });
-
   };
 
-  leasesController.deletelease = (req, res) => {
+  leasesController.deletelease = (req, res, callback) => {
     const id = req.params.id;
 
-    leaseRep.deleteLease(id, (callback) => {
-      if (callback === 0) {
+    leaseRep.deleteLease(id, (callback2, err) => {
+      if (err) {
+        return callback(err);
+      }
+
+      if (callback2 === 0) {
         res.status(200).send("Usuário não encontrado!");
       } else {
         res.status(200).send("Usuário deletado com sucesso!");

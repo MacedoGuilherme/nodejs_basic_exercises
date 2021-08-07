@@ -1,6 +1,6 @@
 const mysql = require("mysql");
 
-module.exports = () => {
+module.exports = (callback) => {
   const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -10,11 +10,10 @@ module.exports = () => {
 
   connection.connect(function (err) {
     if (err) {
-      console.error("error connecting: " + err.stack);
-      return;
+      return callback(connection, err);
     }
 
-    console.log("connected as id " + connection.threadId);
+    return callback(connection, err);
   });
 
   return connection;
