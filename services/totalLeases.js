@@ -1,15 +1,23 @@
 const conectar = require("../repository/config");
 
 module.exports = (callback) => {
-  const connection = conectar();
-  connection.query("SELECT SUM(PRICE) FROM LEASES", function (err, rows) {
+  const connection = conectar((connection, err) => {
     if (err) {
-      console.log(err);
-      return;
+      const error = new Error();
+      error.message = "Não foi possível conectar ao banco de dados";
+      error.httpStatusCode = 500;
+      error.code = "ERR003";
+      return callback(null, error);
     }
+    connection.query("SELECT SUM(PRICE) FROM LEASES", function (err, rows) {
+      if (err) {
+        console.log(err);
+        return;
+      }
 
-    console.log(rows);
+      console.log(rows);
 
-    return callback(rows);
+      return callback(rows);
+    });
   });
 };
