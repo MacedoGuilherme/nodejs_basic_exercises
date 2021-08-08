@@ -16,6 +16,10 @@ module.exports = () => {
   leasesController.finduser = (req, res, callback) => {
     const cpf = req.body.cpf;
 
+    if(!cpf) {
+      throw {httpStatusCode: 400, code: 'ERR001', message: 'CPF é obrigatório'};
+    }
+
     leaseRep.findUser(cpf, (user, err) => {
       // if (callback.length !== 0) {
       //   res.status(200).json(callback);
@@ -30,7 +34,9 @@ module.exports = () => {
   };
 
   leasesController.totalleases = (req, res, callback) => {
-    leaseRep.totalLeases((total, err) => {
+    const customer = req.body.customer;
+
+    leaseRep.totalLeases(customer, (total, err) => {
       if (err) {
         return callback(err);
       }

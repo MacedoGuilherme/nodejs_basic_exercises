@@ -10,13 +10,16 @@ module.exports = (callback) => {
       return callback(null, error);
     }
 
-    connection.query("SELECT * FROM LEASES", function (err, rows) {
-      if (err) {
-        console.log(err);
-        return;
-      }
+    connection.query(
+      "SELECT L.ID, L.ID_CUSTOMER, C.NAME, L.GAME FROM LEASE L LEFT JOIN CUSTOMER C ON C.ID = L.ID_CUSTOMER",
+      function (err, rows) {
+        if (err) {
+          console.log(err);
+          return;
+        }
 
-      return callback(rows);
-    });
+        return callback(rows);
+      }
+    );
   });
 };

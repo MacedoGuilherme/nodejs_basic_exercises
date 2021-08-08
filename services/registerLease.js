@@ -1,6 +1,6 @@
 const conectar = require("../repository/config");
 
-module.exports = deletelease = (id, callback) => {
+module.exports = (lease, callback) => {
   const connection = conectar((connection, err) => {
     if (err) {
       const error = new Error();
@@ -10,17 +10,12 @@ module.exports = deletelease = (id, callback) => {
       return callback(null, error);
     }
 
-    connection.query(
-      `DELETE FROM LEASE WHERE ID = ?`,
-      [id],
-      function (err, res) {
-        if (err) {
-          console.log(err);
-          return;
-        }
-
-        return callback(res.affectedRows);
+    connection.query(`INSERT INTO LEASE SET ?`, lease, function (err, res) {
+      if (err) {
+        console.log(err);
+        return;
       }
-    );
+      return callback('Cadastro OK!');
+    });
   });
 };
