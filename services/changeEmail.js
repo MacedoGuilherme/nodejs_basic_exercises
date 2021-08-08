@@ -13,12 +13,20 @@ module.exports = (user, callback) => {
     }
 
     connection.query(
-      `UPDATE LEASES SET EMAIL = ? WHERE CPF = ${cpf}`,
+      `UPDATE CUSTOMER SET EMAIL = ? WHERE CPF = ${cpf}`,
       newEmail,
       function (err, res) {
         if (err) {
           console.log(err);
           return;
+        }
+
+        if (res.affectedRows === 0) {
+          const error = new Error();
+          error.message = "Registro não encontrado";
+          error.httpStatusCode = 404;
+          error.code = "ERR003";
+          return callback(null, error);
         }
         return callback(res.affectedRows);
       }

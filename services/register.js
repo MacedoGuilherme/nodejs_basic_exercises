@@ -10,7 +10,7 @@ module.exports = (lease, callback) => {
       return callback(null, error);
     }
 
-    connection.query(`INSERT INTO LEASES SET ?`, lease, function (err, res) {
+    connection.query(`INSERT INTO CUSTOMER SET ?`, lease, function (err, res) {
       if (err) {
         console.log(err);
         return;

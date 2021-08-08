@@ -1,6 +1,16 @@
 const express = require("express");
+const yaml = require('js-yaml');
+const fs = require('fs');
+
+try {
+  let fileContents = fs.readFileSync('./configs/dev.yaml', 'utf8');
+  data = yaml.load(fileContents);
+} catch (e) {
+  console.log(e);
+}
+
 const app = express();
-const port = 8080;
+const port = data['port'];
 
 app.use(express.json());
 
