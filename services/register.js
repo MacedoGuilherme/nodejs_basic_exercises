@@ -15,7 +15,7 @@ module.exports = (lease, callback) => {
         console.log(err);
         return;
       }
-      return callback('Cadastro OK!');
+      return callback();
     });
   });
 };

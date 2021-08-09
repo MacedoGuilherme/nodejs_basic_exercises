@@ -16,8 +16,8 @@ module.exports = () => {
   leasesController.finduser = (req, res, callback) => {
     const cpf = req.body.cpf;
 
-    if(!cpf) {
-      throw {httpStatusCode: 400, code: 'ERR001', message: 'CPF é obrigatório'};
+    if (!cpf) {
+      throw { httpStatusCode: 400, code: 'ERR001', message: 'CPF é obrigatório' };
     }
 
     leaseRep.findUser(cpf, (user, err) => {
@@ -64,7 +64,7 @@ module.exports = () => {
           if (err) {
             return callback(err);
           }
-          res.status(200).json('Deu certo!');
+          res.status(200).json();
         });
       } else {
         res.status(400).json(body);
@@ -96,11 +96,7 @@ module.exports = () => {
         return callback(err);
       }
 
-      if (callback2 === 0) {
-        res.status(200).send("Usuário não encontrado!");
-      } else {
-        res.status(200).send("Usuário deletado com sucesso!");
-      }
+      res.status(200).res.send();
     });
   };
 

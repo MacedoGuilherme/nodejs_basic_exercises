@@ -11,7 +11,7 @@ module.exports = (customer, callback) => {
       return callback(null, error);
     }
     connection.query(
-      `SELECT COUNT(L.ID_CUSTOMER) FROM LEASE L LEFT JOIN CUSTOMER C ON C.ID = L.ID_CUSTOMER WHERE NAME = "${customer}";
+      `SELECT C.NAME, SUM(L.PRICE) FROM LEASE L LEFT JOIN CUSTOMER C ON C.ID = L.ID_CUSTOMER WHERE NAME = "${customer}"ww;
       `,
       function (err, rows) {
         if (err) {
@@ -19,27 +19,8 @@ module.exports = (customer, callback) => {
           return;
         }
 
-        console.log(Object.entries(rows).length);
+        return callback(rows);
 
-        if (Object.keys(rows) == "0") {
-          const error = new Error();
-          error.message = "Registro não encontrado";
-          error.httpStatusCode = 404;
-          error.code = "ERR003";
-          return callback(null, error);
-        } else {
-          connection.query(
-            `SELECT C.NAME, SUM(L.PRICE) FROM LEASE L LEFT JOIN CUSTOMER C ON C.ID = L.ID_CUSTOMER WHERE NAME = "${customer}`,
-            function (err, rows) {
-              if (err) {
-                console.log(err);
-                return;
-              }
-              console.log(rows);
-              return callback(rows);
-            }
-          );
-        }
       }
     );
   });

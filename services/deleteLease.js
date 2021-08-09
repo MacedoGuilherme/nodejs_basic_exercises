@@ -19,6 +19,14 @@ module.exports = deletelease = (id, callback) => {
           return;
         }
 
+        if (res.affectedRows == 0) {
+          const error = new Error();
+          error.message = "Registro não encontrado";
+          error.httpStatusCode = 404;
+          error.code = "ERR003";
+          return callback(null, error);
+        }
+
         return callback(res.affectedRows);
       }
     );
