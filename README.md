@@ -1,1 +1,2 @@
-# project_node_basic
+Projeteto referente aos exercícios propostos no módulo de NodeJS básico, da pós-graduação UP FULL STACK DEVELOPER JAVASCRIPT.
+
